@@ -19,4 +19,5 @@ while ($currentDeposit < 200000) {
     $years++;
 }
 
-echo "Через $years лет депозит удвоится до " . round($currentDeposit) . " рублей.\n";
+echo "Через $years лет депозит удвоится до " . round($currentDeposit) . " рублей.\n" .
+    "Итоговый процент: " . $percent;
