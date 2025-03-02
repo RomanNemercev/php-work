@@ -1,8 +1,10 @@
 <?php
 
-$phrase = "hello world";
-$shift = 3;
+$phrase = "Hello World";
+$shift = 34649643;
 $encrypted = "";
+
+$shift = $shift % 26;  // Приводим сдвиг к диапазону 0-25
 
 for ($i = 0; $i < strlen($phrase); $i++) {
     $char = $phrase[$i];
@@ -14,12 +16,26 @@ for ($i = 0; $i < strlen($phrase); $i++) {
 
     $code = ord($char);
 
-    $newCode = $code + $shift;
-    if ($newCode > 122) {
-        $newCode = $newCode - 26;  // Если вышли за 'z', возвращаемся в начало.
+    // Шифруем строчные буквы (a-z)
+    if ($code >= ord('a') && $code <= ord('z')) {
+        $newCode = $code + $shift;
+        if ($newCode > ord('z')) {
+            $newCode = ord('a') + ($newCode - ord('z') - 1);
+        }
+        $encrypted .= chr($newCode);
     }
-
-    $encrypted .= chr($newCode);
+    // Шифруем заглавные буквы (A-Z)
+    elseif ($code >= ord('A') && $code <= ord('Z')) {
+        $newCode = $code + $shift;
+        if ($newCode > ord('Z')) {
+            $newCode = ord('A') + ($newCode - ord('Z') - 1);
+        }
+        $encrypted .= chr($newCode);
+    }
+    // Не латинские символы оставляем без изменений
+    else {
+        $encrypted .= $char;
+    }
 }
 
 echo "Зашифрованное сообщение: " . $encrypted . "\n";
@@ -35,12 +51,27 @@ for ($i = 0; $i < strlen($encrypted); $i++) {
     }
 
     $code = ord($char);
-    $newCode = $code - $shift;
-    if ($newCode < 97) {
-        $newCode = $newCode + 26;
-    }
 
-    $decrypted .= chr($newCode);
+    // Дешифруем строчные буквы (a-z)
+    if ($code >= ord('a') && $code <= ord('z')) {
+        $newCode = $code - $shift;
+        if ($newCode < ord('a')) {
+            $newCode = ord('z') - (ord('a') - $newCode - 1);
+        }
+        $decrypted .= chr($newCode);
+    }
+    // Дешифруем заглавные буквы (A-Z)
+    elseif ($code >= ord('A') && $code <= ord('Z')) {
+        $newCode = $code - $shift;
+        if ($newCode < ord('A')) {
+            $newCode = ord('Z') - (ord('A') - $newCode - 1);
+        }
+        $decrypted .= chr($newCode);
+    }
+    // Не латинские символы оставляем без изменений
+    else {
+        $decrypted .= $char;
+    }
 }
 
 echo "Расшифрованное сообщение: " . $decrypted . "\n";
